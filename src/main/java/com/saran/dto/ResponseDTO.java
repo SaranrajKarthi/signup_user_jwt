@@ -6,9 +6,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class ResponseDTO {
 
 	private String statusCode;
-	
+
+	private String token;
+
 	private String error;
-	
+
 	private String message;
 
 	public String getStatusCode() {
@@ -17,6 +19,14 @@ public class ResponseDTO {
 
 	public void setStatusCode(String statusCode) {
 		this.statusCode = statusCode;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	public String getError() {
@@ -35,6 +45,4 @@ public class ResponseDTO {
 		this.message = message;
 	}
 
-	
-	
 }
