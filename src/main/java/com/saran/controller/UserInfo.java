@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.saran.dto.ResponseDTO;
 import com.saran.entity.User;
 import com.saran.service.UserService;
 
@@ -19,21 +20,26 @@ public class UserInfo {
 	UserService userService;
 
 	@GetMapping("/my-info")
-	public ResponseEntity<User> getMyInfo(@RequestHeader("Authorization") String token){
+	public ResponseEntity<Object> getMyInfo(@RequestHeader("Authorization") String token){
+		ResponseDTO response = new ResponseDTO();
 		Claims claims = validateToken(token);
 		
 		if (claims == null) {
-			return ResponseEntity.status(401).build();			
+			response.setStatusCode("Access Denied - 401");
+			response.setMessage("Unauthorized Access");
+			return ResponseEntity.status(401).body(response);			
 		}
 		String email =  claims.getSubject();
 		User user = userService.getUserByEmail(email);
+		
+		
 		return ResponseEntity.ok(user);
 	}
 
 	private Claims validateToken(String token) {
 
 		try {
-			return Jwts.parser().setSigningKey("8Ns5L8qvBbeIcAvF6zARokHy27SZdnq1").parseClaimsJws(token).getBody();
+			return Jwts.parser().setSigningKey("SECRET_KEY").parseClaimsJws(token).getBody();
 		} catch (Exception e) {
 			return null;
 		}
